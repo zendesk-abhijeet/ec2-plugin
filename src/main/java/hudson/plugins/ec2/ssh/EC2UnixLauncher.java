@@ -239,20 +239,6 @@ public class EC2UnixLauncher extends EC2ComputerLauncher {
                     logInfo(computer, listener, "Creating tmp directory (" + tmpDir + ") if it does not exist");
                     executeRemote(clientSession, "mkdir -p " + tmpDir, logger);
 
-                    // ToDo: Remove this block after testing.
-                    // Debug log block start.
-                    if (StringUtils.isNotBlank(initScript)) {
-                        logInfo(computer, listener, "init script is not blank");
-                    } else {
-                        logInfo(computer, listener, "init script is blank");
-                    }
-                    if (!executeRemote(clientSession, "test -e ~/.hudson-run-init", logger)) {
-                        logInfo(computer, listener, "init script has not executed");
-                    } else {
-                        logInfo(computer, listener, "init script has already executed");
-                    }
-                    // Debug log block end.
-
                     if (StringUtils.isNotBlank(initScript)
                             && !executeRemote(clientSession, "test -e ~/.hudson-run-init", logger)) {
                         logInfo(computer, listener, "Upload init script");
@@ -269,19 +255,13 @@ public class EC2UnixLauncher extends EC2ComputerLauncher {
                         String initCommand = buildUpCommand(computer, tmpDir + "/init.sh");
                         // Set the flag only when init script executed successfully.
                         if (executeRemote(clientSession, initCommand, logger)) {
-                            // ToDo: Remove this log line below after testing.
                             logInfo(computer, listener, "init script executed successfully");
                             logInfo(computer, listener, "Creating ~/.hudson-run-init");
                             String createHudsonRunInitCommand = buildUpCommand(computer, "touch ~/.hudson-run-init");
-                            if (executeRemote(clientSession, createHudsonRunInitCommand, logger)) {
-                                // ToDo: Remove this log line below after testing.
-                                logInfo(computer, listener, "Successfully created ~/.hudson-run-init");
-                            } else {
-                                // ToDo: Remove this log line below after testing.
+                            if (!executeRemote(clientSession, createHudsonRunInitCommand, logger)) {
                                 logInfo(computer, listener, "Unable to create ~/.hudson-run-init");
                             }
                         } else {
-                            // ToDo: Remove this log line below after testing.
                             logInfo(computer, listener, "Failed to execute init script.");
                             throw new IOException("Failed to execute init script.");
                         }

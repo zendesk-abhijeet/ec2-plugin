@@ -255,14 +255,16 @@ public class EC2UnixLauncher extends EC2ComputerLauncher {
                         String initCommand = buildUpCommand(computer, tmpDir + "/init.sh");
                         // Set the flag only when init script executed successfully.
                         if (executeRemote(clientSession, initCommand, logger)) {
-                            logInfo(computer, listener, "init script executed successfully");
-                            logInfo(computer, listener, "Creating ~/.hudson-run-init");
+                            log(
+                                    Level.FINE,
+                                    computer,
+                                    listener,
+                                    "Init script executed successfully and creating ~/.hudson-run-init");
                             String createHudsonRunInitCommand = buildUpCommand(computer, "touch ~/.hudson-run-init");
                             if (!executeRemote(clientSession, createHudsonRunInitCommand, logger)) {
                                 logInfo(computer, listener, "Unable to create ~/.hudson-run-init");
                             }
                         } else {
-                            logInfo(computer, listener, "Failed to execute init script.");
                             throw new IOException("Failed to execute init script.");
                         }
                     }

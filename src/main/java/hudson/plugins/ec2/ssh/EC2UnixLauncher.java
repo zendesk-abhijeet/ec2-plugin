@@ -263,7 +263,9 @@ public class EC2UnixLauncher extends EC2ComputerLauncher {
                                 logInfo(computer, listener, "Unable to create ~/.hudson-run-init");
                             }
                         } else {
-                            throw new IOException("Failed to execute init script.");
+                            log(Level.WARNING, computer, listener, "Failed to execute init script.");
+                            clientSession.close();
+                            return;
                         }
                     }
 

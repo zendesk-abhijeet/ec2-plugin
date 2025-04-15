@@ -230,7 +230,7 @@ public class InitScriptExecutionTest {
         assertTrue(loggerRule.getMessages().stream()
                 .anyMatch(message -> message.contains("Failed to execute remote command: exit 1")));
         assertTrue(loggerRule.getMessages().stream()
-                .anyMatch(message -> message.contains("Failed to execute init script.")));
+                .anyMatch(message -> message.contains("Failed to execute init script on i-initscripttest")));
     }
 
     @Test

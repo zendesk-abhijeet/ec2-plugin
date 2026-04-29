@@ -1154,13 +1154,16 @@ public class EC2Cloud extends Cloud {
                 plannedNodes.add(new PlannedNode(t.getDisplayName(), nodeFuture, t.getNumExecutors()));
             }
 
+            excessWorkload -= number * t.getNumExecutors();
+            if (excessWorkload <= 0) {
+                break;
+            }
+
             LOGGER.log(
-                    Level.INFO, "{0}. Provision scheduled for {1} nodes, returning immediately", new Object[] {t, number
-                    });
+                    Level.INFO, "{0}. Provision scheduled for {1} nodes", new Object[] {t, number});
             LOGGER.log(Level.INFO, "We have now {0} computers, waiting for {1} more", new Object[] {
                 jenkinsInstance.getComputers().length, plannedNodes.size()
             });
-            return plannedNodes;
         }
         return plannedNodes;
     }
